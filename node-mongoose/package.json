@@ -1,0 +1,17 @@
+{
+  "name": "node-mongoose",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bird": "^0.7.0",
+    "blue": "^1.1.1",
+    "mongoose": "^5.1.7"
+  }
+}
