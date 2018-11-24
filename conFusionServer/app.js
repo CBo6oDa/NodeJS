@@ -15,11 +15,10 @@ var promoRouter = require('./routes/promotionRouter');
 var leaderRouter = require('./routes/leaderRouter');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-
+var config = require('./config');
 const mongoose = require('mongoose');
-const url = 'mongodb://localhost:27017/conFusion';
+const url = config.mongoUrl;
 const connect = mongoose.connect(url);
-
 connect.then((db) => {
     console.log("Connected correctly to server");
 }, (err) => { console.log(err); });
