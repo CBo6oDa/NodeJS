@@ -10,6 +10,7 @@ var authenticate = require('./authenticate');
 var session = require('express-session');
 var FileStore = require('session-file-store')(session);
 
+const uploadRouter = require('./routes/uploadRouter');
 var dishRouter = require('./routes/dishRouter');
 var promoRouter = require('./routes/promotionRouter');
 var leaderRouter = require('./routes/leaderRouter');
@@ -52,6 +53,7 @@ app.use(session({
   app.use('/dishes',dishRouter);
   app.use('/promotions',promoRouter);
   app.use('/leaders',leaderRouter);
+  app.use('/imageUpload',uploadRouter);
   
   function auth (req, res, next) {
     console.log(req.user);
