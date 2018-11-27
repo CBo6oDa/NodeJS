@@ -60,6 +60,31 @@ favoriteRouter.route('/')
 
 favoriteRouter.route('/:dishId')
     .all(authenticate.verifyUser)
+    .get(authenticate.verifyUser, (req,res,next) => {
+        Favorites.findOne({user: req.user._id})
+        .then((favorites) => {
+            if (!favorites) {
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'application/json');
+                return res.json({"exists": false, "favorites": favorites});
+            }
+            else {
+                if (favorites.dishes.indexOf(req.params.dishId) < 0) {
+                    res.statusCode = 200;
+                    res.setHeader('Content-Type', 'application/json');
+                    return res.json({"exists": false, "favorites": favorites});
+                }
+                else {
+                    res.statusCode = 200;
+                    res.setHeader('Content-Type', 'application/json');
+                    return res.json({"exists": true, "favorites": favorites});
+                }
+            }
+    
+        }, (err) => next(err))
+        .catch((err) => next(err))
+    })
+
     .post(function( req,res,next){
         Favorites.find({'user': req.user._id}, function (err, favorites) {
             if (err) return err;
@@ -86,8 +111,8 @@ favoriteRouter.route('/:dishId')
 
         });
     })
-    .delete(function (req, res, next) {
-
+    
+    .delete(authenticate.verifyUser, (req, res, next) => {
         Favorites.find({'user': req.user._id}, function (err, favorites) {
             if (err) return err;
             var favorite = favorites ? favorites[0] : null;
@@ -98,12 +123,20 @@ favoriteRouter.route('/:dishId')
                         favorite.dishes.remove(req.params.dishId);
                     }
                 }
-                favorite.save(function (err, favorite) {
-                    if (err) throw err;
-                    console.log('Delete!');
-                    res.json(favorite);
-                });
-            } else {
+                favorite.save()
+                .then((favorite) => {
+                    Favorites.findById(favorite._id)
+                    .populate('user')
+                    .populate('dishes')
+                    .then((favorite) => {
+                        console.log('Favorite Dish Deleted!', favorite);
+                        res.statusCode = 200;
+                        res.setHeader('Content-Type', 'application/json');
+                        res.json(favorite);
+                    })
+                })
+            } 
+            else {
                 console.log('No favourites!');
                 res.json(favorite);
             }
