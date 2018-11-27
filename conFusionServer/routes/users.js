@@ -82,6 +82,7 @@ router.post('/login', cors.corsWithOptions, (req, res, next) => {
       res.json({success: true, status: 'Login Successful!', token: token});
     }); 
   }) (req, res, next);
+  
 });
 
 router.get('/checkJWTToken', cors.corsWithOptions, (req, res) => {
