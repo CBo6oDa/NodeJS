@@ -9,7 +9,7 @@ var authenticate = require('./authenticate');
 
 var session = require('express-session');
 var FileStore = require('session-file-store')(session);
-
+var favoriteRouter = require('./routes/favoriteRouter');
 const uploadRouter = require('./routes/uploadRouter');
 var dishRouter = require('./routes/dishRouter');
 var promoRouter = require('./routes/promotionRouter');
@@ -49,6 +49,7 @@ app.use(session({
   app.use(passport.session());
   
   app.use('/', indexRouter);
+  app.use('/favorites', favoriteRouter);
   app.use('/users', usersRouter);
   app.use('/dishes',dishRouter);
   app.use('/promotions',promoRouter);
